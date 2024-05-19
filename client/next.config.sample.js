@@ -45,6 +45,6 @@ module.exports = {
   },
 
   images: {
-    domains: ['localhost', 'makeclient.ngrok.io', 'picsum.photos', 'img.icons8.com']
+    domains: ['cicd.iswad.tech', 'makeclient.ngrok.io', 'picsum.photos', 'img.icons8.com']
   }
 };
