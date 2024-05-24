@@ -1,47 +1,50 @@
-pipeline {
+ipeline {
     agent any
     triggers {
-        githubPush() // Trigger the pipeline on a push to the repository
+        githubPush()
     }
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the GitHub repository
-                git url: 'https://github.com/mmmohajer/baseproject.git', branch: 'main'
+                git url: 'https://github.com/divyajadhav1/baseproject.git', branch: 'master'
             }
         }
         stage('Install Dependencies') {
             steps {
                 script {
                     if (isUnix()) {
-                        sh './automation.sh 1' // For Mac/Linux
+                        sh './automation.sh 1'
                     } else {
-                        bat 'automation.sh 2' // For Windows
+                        bat 'automation.sh 2'
                     }
                 }
             }
         }
         stage('Build') {
             steps {
-                // Build the application using Docker
                 sh 'docker-compose -f docker-compose-dev.yml up --build -d'
             }
         }
         stage('Deploy') {
             steps {
-                // Deploy the application
                 sh 'docker-compose -f docker-compose-prod-ssl.yml up --build -d'
             }
         }
     }
     post {
         success {
-            // Notify on success
-            slackSend(channel: 'C06V21ENT1C', message: "Build Success: ${currentBuild.fullDisplayName}", tokenCredentialId: 'Slack_Token')
+            emailext(
+                to: 'divjadhav18@gmail.com',
+                subject: "Build Success: ${currentBuild.fullDisplayName}",
+                body: "The build was successful.\n\nBuild Details:\n\n${currentBuild.fullDisplayName}\n\n${currentBuild.url}"
+            )
         }
         failure {
-            // Notify on failure
-            slackSend(channel: 'C06V21ENT1C', message: "Build Failed: ${currentBuild.fullDisplayName}", tokenCredentialId: 'Slack_Token')
+            emailext(
+                to: 'divjadhav18@gmail.com',
+                subject: "Build Failed: ${currentBuild.fullDisplayName}",
+                body: "The build failed. Please check the Jenkins console output for details.\n\nBuild Details:\n\n${currentBuild.fullDisplayName}\n\n${currentBuild.url}"
+            )
         }
     }
 }
