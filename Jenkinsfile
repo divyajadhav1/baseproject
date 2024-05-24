@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 pipeline {
     agent any
     triggers {
@@ -100,4 +99,3 @@ pipeline {
         }
     }
 }
->>>>>>> 75ad3d7 (all files updated)
