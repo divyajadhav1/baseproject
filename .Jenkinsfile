@@ -16,10 +16,20 @@ pipeline {
                 git url: 'https://github.com/divyajadhav1/baseproject.git', branch: 'master'
             }
         }
-       
+        
         stage('Build') {
             steps {
-                sh 'docker-compose -f docker-compose-createSSL.yml up --build -d'
+                script {
+                    withEnv([
+                        "DB_PORT=${env.DB_PORT}",
+                        "SERVER_PORT=${env.SERVER_PORT}",
+                        "CELERY_FLOWER_USER=${env.CELERY_FLOWER_USER}",
+                        "CELERY_FLOWER_PASSWORD=${env.CELERY_FLOWER_PASSWORD}",
+                        "APP_URL=${env.APP_URL}"
+                    ]) {
+                        sh 'docker-compose -f docker-compose-createSSL.yml up --build -d'
+                    }
+                }
             }
         }
         
@@ -29,15 +39,16 @@ pipeline {
             emailext(
                 to: 'divjadhav18@gmail.com',
                 subject: "Build Success: ${currentBuild.fullDisplayName}",
-                body: "The build was successful.\n\nBuild Details:\n\n${currentBuild.fullDisplayName}\n\n${currentBuild.url}"
+                body: "The build was successful.\n\nBuild Details:\n\n${currentBuild.fullDisplayName}"
             )
         }
         failure {
             emailext(
                 to: 'divjadhav18@gmail.com',
                 subject: "Build Failed: ${currentBuild.fullDisplayName}",
-                body: "The build failed. Please check the Jenkins console output for details.\n\nBuild Details:\n\n${currentBuild.fullDisplayName}\n\n${currentBuild.url}"
+                body: "The build failed. Please check the Jenkins console output for details.\n\nBuild Details:\n\n${currentBuild.fullDisplayName}"
             )
         }
     }
 }
+
