@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'docker-compose -f docker-compose-dev.yml up --build -d'
+                sh 'docker-compose -f docker-compose-createSSL.yml up --build -d'
             }
         }
         
