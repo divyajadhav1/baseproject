@@ -25,11 +25,7 @@ pipeline {
                 sh 'docker-compose -f docker-compose-dev.yml up --build -d'
             }
         }
-        stage('Deploy') {
-            steps {
-                sh 'docker-compose -f docker-compose-prod-ssl.yml up --build -d'
-            }
-        }
+        
     }
     post {
         success {
