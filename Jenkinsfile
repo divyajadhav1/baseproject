@@ -9,17 +9,7 @@ pipeline {
                 git url: 'https://github.com/divyajadhav1/baseproject.git', branch: 'master'
             }
         }
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh './automation.sh 1'
-                    } else {
-                        bat 'automation.sh 2'
-                    }
-                }
-            }
-        }
+       
         stage('Build') {
             steps {
                 sh 'docker-compose -f docker-compose-createSSL.yml up --build -d'
