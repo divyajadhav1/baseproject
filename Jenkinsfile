@@ -3,6 +3,13 @@ pipeline {
     triggers {
         githubPush()
     }
+    environment {
+        DB_PORT = '5432'
+        SERVER_PORT = '5001'
+        CELERY_FLOWER_USER = 'djadhav'
+        CELERY_FLOWER_PASSWORD = 'divya@iswad'
+        APP_URL = 'cicd.iswad.tech'
+    }
     stages {
         stage('Checkout') {
             steps {
